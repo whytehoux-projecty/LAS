@@ -64,3 +64,10 @@ las_core/qdrant_data/
 las_core/postgres_data/
 las_core/.screenshots/
 las_core/llm_router/
+
+# Large AI models
+*.onnx
+*.bin
+*.safetensors
+*.pt
+*.pth
