@@ -94,7 +94,7 @@ services:
 
   # LAS Backend (proxied through Kong)
   las-backend:
-    build: ./las_core
+    build: ../../las_core
     container_name: las-backend
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/las_db
