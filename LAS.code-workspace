@@ -1,0 +1,47 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../../../../../../Users/macbook/Downloads/ollama-python-main"
+		},
+		{
+			"path": "../../../../../../../Users/macbook/Downloads/agent-chat-ui-main"
+		},
+		{
+			"path": "../../../../../../../Users/macbook/Downloads/ai-main"
+		},
+		{
+			"path": "../../../../../../../Users/macbook/Downloads/hf-endpoints-documentation-main"
+		},
+		{
+			"path": "../../../../../../../Users/macbook/Downloads/chat-ui-main"
+		},
+		{
+			"path": "../../../../../../../Users/macbook/Downloads/ai-elements-main"
+		},
+		{
+			"path": "../.."
+		},
+		{
+			"path": "../../../Alchemy Projects"
+		},
+		{
+			"path": "../../../UI Projects/nextjs-ollama-llm-ui-master"
+		},
+		{
+			"path": "../../../../../../../Users/macbook/Downloads/openrouter-python-sdk-main"
+		},
+		{
+			"path": "../../../../../../../Users/macbook/Downloads/openrouter-typescript-sdk-main"
+		},
+		{
+			"path": "../../../../../../../Users/macbook/Downloads/openrouter-ai-sdk-provider-main"
+		},
+		{
+			"path": "../../../../../../../Users/macbook/Downloads/openrouter-examples-main"
+		}
+	],
+	"settings": {}
+}

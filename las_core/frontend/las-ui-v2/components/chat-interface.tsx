@@ -3,12 +3,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAgentStream } from '@/lib/hooks/use-stream';
 import { lasApi } from '@/lib/api';
+import { ModelSelector } from './model-selector';
+import ReactMarkdown from 'react-markdown';
 
 export function ChatInterface() {
     const [input, setInput] = useState('');
     const [history, setHistory] = useState<{ role: string, content: string }[]>([]);
     const { messages, isConnected } = useAgentStream();
     const scrollRef = useRef<HTMLDivElement>(null);
+
+    const [selectedProvider, setSelectedProvider] = useState("ollama");
+    const [selectedModel, setSelectedModel] = useState("");
 
     // Auto-scroll to bottom
     useEffect(() => {
@@ -38,18 +43,26 @@ export function ChatInterface() {
         setHistory((prev: { role: string, content: string }[]) => [...prev, { role: 'user', content: userMsg }]);
 
         try {
-            await lasApi.query(userMsg);
+            await lasApi.query(userMsg, selectedProvider, selectedModel);
         } catch (error) {
             console.error('Failed to send message:', error);
             setHistory((prev: { role: string, content: string }[]) => [...prev, { role: 'system', content: 'Error sending message.' }]);
         }
     };
 
+    const handleModelChange = (provider: string, model: string) => {
+        setSelectedProvider(provider);
+        setSelectedModel(model);
+    };
+
     return (
         <div className="flex flex-col h-[600px] w-full max-w-4xl mx-auto border rounded-xl overflow-hidden bg-background shadow-lg">
             {/* Header */}
             <div className="p-4 border-b bg-muted/50 flex justify-between items-center">
-                <h2 className="font-semibold">Agent Chat</h2>
+                <div className="flex items-center gap-4">
+                    <h2 className="font-semibold">Agent Chat</h2>
+                    <ModelSelector onModelChange={handleModelChange} />
+                </div>
                 <div className={`w-3 h-3 rounded-full ${isConnected ? 'bg-green-500' : 'bg-red-500'}`} title={isConnected ? "Connected" : "Disconnected"} />
             </div>
 
@@ -61,7 +74,9 @@ export function ChatInterface() {
                             ? 'bg-primary text-primary-foreground'
                             : 'bg-muted'
                             }`}>
-                            <p className="text-sm">{msg.content}</p>
+                            <ReactMarkdown className="text-sm prose dark:prose-invert max-w-none">
+                                {msg.content}
+                            </ReactMarkdown>
                         </div>
                     </div>
                 ))}

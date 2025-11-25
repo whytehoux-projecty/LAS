@@ -4,6 +4,7 @@ import axios from "axios";
 import "./App.css";
 import { ThemeToggle } from "./components/ThemeToggle";
 import { ResizableLayout } from "./components/ResizableLayout";
+import { ModelSelector } from "./components/ModelSelector";
 import faviconPng from "./logo.png";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -19,6 +20,7 @@ function App() {
   const [isOnline, setIsOnline] = useState(false);
   const [status, setStatus] = useState("Agents ready");
   const [expandedReasoning, setExpandedReasoning] = useState(new Set());
+  const [modelConfig, setModelConfig] = useState({ provider: 'ollama', model: 'tinydolphin' });
   const messagesEndRef = useRef(null);
 
   const fetchLatestAnswer = useCallback(async () => {
@@ -173,6 +175,8 @@ function App() {
       const res = await axios.post(`${BACKEND_URL}/query`, {
         query,
         tts_enabled: false,
+        provider: modelConfig.provider,
+        model: modelConfig.model
       });
       setQuery("Enter your query...");
       console.log("Response:", res.data);
@@ -242,7 +246,10 @@ function App() {
       <main className="main">
         <ResizableLayout initialLeftWidth={50}>
           <div className="chat-section">
-            <h2>Chat Interface</h2>
+            <div className="chat-header-controls">
+              <h2>Chat Interface</h2>
+              <ModelSelector onModelChange={setModelConfig} disabled={isLoading} />
+            </div>
             <div className="messages">
               {messages.length === 0 ? (
                 <p className="placeholder">
@@ -252,13 +259,12 @@ function App() {
                 messages.map((msg, index) => (
                   <div
                     key={index}
-                    className={`message ${
-                      msg.type === "user"
+                    className={`message ${msg.type === "user"
                         ? "user-message"
                         : msg.type === "agent"
-                        ? "agent-message"
-                        : "error-message"
-                    }`}
+                          ? "agent-message"
+                          : "error-message"
+                      }`}
                   >
                     <div className="message-header">
                       {msg.type === "agent" && (
@@ -370,8 +376,8 @@ function App() {
               {currentView === "blocks" ? (
                 <div className="blocks">
                   {responseData &&
-                  responseData.blocks &&
-                  Object.values(responseData.blocks).length > 0 ? (
+                    responseData.blocks &&
+                    Object.values(responseData.blocks).length > 0 ? (
                     Object.values(responseData.blocks).map((block, index) => (
                       <div key={index} className="block">
                         <p className="block-tool">Tool: {block.tool_type}</p>

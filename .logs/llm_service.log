@@ -1,0 +1,4 @@
+2025-11-24 01:34:58,330 - llm_service.log - INFO - LLM Service initialized with provider: ollama
+2025-11-24 01:45:42,442 - llm_service.log - INFO - LLM Service initialized with provider: ollama
+2025-11-24 02:02:19,537 - llm_service.log - INFO - LLM Service initialized with provider: ollama
+2025-11-24 02:22:03,257 - llm_service.log - INFO - LLM Service initialized with provider: ollama

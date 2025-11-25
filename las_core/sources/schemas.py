@@ -6,14 +6,18 @@ from sources.utility import pretty_print
 class QueryRequest(BaseModel):
     query: str
     tts_enabled: bool = True
+    provider: str = None
+    model: str = None
 
     def __str__(self):
-        return f"Query: {self.query}, Language: {self.lang}, TTS: {self.tts_enabled}, STT: {self.stt_enabled}"
+        return f"Query: {self.query}, TTS: {self.tts_enabled}, Provider: {self.provider}, Model: {self.model}"
 
     def jsonify(self):
         return {
             "query": self.query,
             "tts_enabled": self.tts_enabled,
+            "provider": self.provider,
+            "model": self.model
         }
 
 class QueryResponse(BaseModel):

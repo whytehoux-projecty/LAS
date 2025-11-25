@@ -10,20 +10,33 @@ class LLMService:
     def __new__(cls):
         if cls._instance is None:
             cls._instance = super(LLMService, cls).__new__(cls)
-            cls._instance.initialize()
+            cls._instance._initialized = False
+            cls._instance.initialize()  # Call initialize immediately
         return cls._instance
 
     def initialize(self):
-        self.provider = Provider(
-            provider_name=settings.provider_name,
-            model=settings.provider_model,
-            server_address=settings.provider_server_address,
-            is_local=settings.is_local
-        )
-        logger.info(f"LLM Service initialized with provider: {self.provider.provider_name}")
+        if not hasattr(self, '_initialized') or not self._initialized:
+            try:
+                self.provider = Provider(
+                    provider_name=settings.provider_name,
+                    model=settings.provider_model,
+                    server_address=settings.provider_server_address,
+                    is_local=settings.is_local
+                )
+                self._initialized = True
+                logger.info(f"LLM Service initialized with provider: {self.provider.provider_name}")
+            except Exception as e:
+                logger.error(f"Failed to initialize provider: {e}")
+                raise e
 
     def get_provider(self):
         return self.provider
+
+    def get_available_models(self, provider_name: str = None):
+        return self.provider.list_models(provider_name)
+
+    def get_langchain_llm(self):
+        return self.provider.get_langchain_llm()
 
 def get_llm_service():
     return LLMService()

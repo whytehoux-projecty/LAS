@@ -1,12 +1,15 @@
 from langchain_core.messages import HumanMessage
 from services.tool_service import get_tool_service
 from config.settings import settings
-from langchain_community.chat_models import ChatOllama
+
 from langchain.tools import Tool
+
+from services.llm_service import get_llm_service
 
 class WebSurferAgent:
     def __init__(self):
-        self.llm = ChatOllama(model=settings.provider_model, base_url=settings.provider_server_address)
+        self.llm_service = get_llm_service()
+        self.llm = self.llm_service.get_langchain_llm()
         self.tool_service = get_tool_service()
 
     def run(self, state):

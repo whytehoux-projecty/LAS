@@ -66,6 +66,27 @@ async def process_query(request: QueryRequest):
 
     try:
         is_generating = True
+        
+        # Update provider if specified
+        if request.provider and request.model:
+            logger.info(f"Switching provider to {request.provider} with model {request.model}")
+            # Assuming interaction.agents[0].provider is the shared provider instance
+            # Or access via interaction_service.provider if accessible
+            # Since we don't have direct access to interaction_service.provider here easily without getter
+            # We can access it via the first agent in interaction
+            if interaction.agents:
+                provider_instance = interaction.agents[0].provider
+                provider_instance.provider_name = request.provider
+                provider_instance.model = request.model
+                # Also update the available_providers dict if needed? 
+                # No, available_providers is a dict of functions, provider_name selects the key.
+                # We might need to re-initialize api_key if switching to a cloud provider that wasn't set?
+                # The Provider class handles api_key fetching in __init__ but we might need to trigger it if switching.
+                # Let's check Provider class again.
+                if request.provider in provider_instance.unsafe_providers:
+                     # Re-fetch API key just in case it wasn't loaded (though get_api_key loads dotenv)
+                     provider_instance.api_key = provider_instance.get_api_key(request.provider)
+
         success = await think_wrapper(interaction, request.query)
         is_generating = False
 

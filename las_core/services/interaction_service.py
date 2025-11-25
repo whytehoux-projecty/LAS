@@ -35,11 +35,15 @@ class InteractionService:
             logger.warning("Detected Docker environment - forcing headless_browser=True")
             headless = True
         
-        browser = Browser(
-            create_driver(headless=headless, stealth_mode=stealth_mode, lang=languages[0]),
-            anticaptcha_manual_install=stealth_mode
-        )
-        logger.info("Browser initialized")
+        try:
+            browser = Browser(
+                create_driver(headless=headless, stealth_mode=stealth_mode, lang=languages[0]),
+                anticaptcha_manual_install=stealth_mode
+            )
+            logger.info("Browser initialized")
+        except Exception as e:
+            logger.error(f"Failed to initialize browser: {e}")
+            browser = None
 
         agents = [
             CasualAgent(
@@ -70,14 +74,15 @@ class InteractionService:
         ]
         logger.info("Agents initialized")
 
-        interaction = Interaction(
+        from sources.langgraph_interaction import LangGraphInteraction
+        interaction = LangGraphInteraction(
             agents,
             tts_enabled=settings.speak,
             stt_enabled=settings.listen,
             recover_last_session=settings.recover_last_session,
             langs=languages
         )
-        logger.info("Interaction initialized")
+        logger.info("Interaction initialized (LangGraph)")
         return interaction
 
     def _is_running_in_docker(self):

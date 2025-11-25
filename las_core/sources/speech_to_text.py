@@ -23,7 +23,7 @@ class AudioRecorder:
     """
     AudioRecorder is a class that records audio from the microphone and adds it to the audio queue.
     """
-    def __init__(self, format: int = pyaudio.paInt16, channels: int = 1, rate: int = 4096, chunk: int = 8192, record_seconds: int = 5, verbose: bool = False):
+    def __init__(self, format: int = None, channels: int = 1, rate: int = 4096, chunk: int = 8192, record_seconds: int = 5, verbose: bool = False):
         self.format = format
         self.channels = channels
         self.rate = rate
@@ -33,6 +33,8 @@ class AudioRecorder:
         self.thread = None
         self.audio = None
         if IMPORT_FOUND:
+            if self.format is None:
+                self.format = pyaudio.paInt16
             self.audio = pyaudio.PyAudio()
             self.thread = threading.Thread(target=self._record, daemon=True)
 

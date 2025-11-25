@@ -11,3 +11,10 @@ class GraphState(TypedDict):
     task: str
     plan: str
     outputs: dict
+    critique: str
+    feedback: str
+    worker_role: str
+    worker_instructions: str
+    task_success: bool
+    reflection_enabled: bool
+    skill_learning_enabled: bool

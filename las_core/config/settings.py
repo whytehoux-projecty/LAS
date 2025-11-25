@@ -22,6 +22,9 @@ class Settings(BaseSettings):
     headless_browser: bool = Field(False, alias="HEADLESS_BROWSER")
     stealth_mode: bool = Field(False, alias="STEALTH_MODE")
 
+    # Ollama Cloud Config
+    ollama_cloud_api_key: Optional[str] = Field(None, alias="OLLAMA_CLOUD_API_KEY")
+
     # Database Config (Future Proofing)
     postgres_user: str = Field("postgres", alias="POSTGRES_USER")
     postgres_password: str = Field("postgres", alias="POSTGRES_PASSWORD")
@@ -32,6 +35,10 @@ class Settings(BaseSettings):
     # Vector DB Config
     qdrant_host: str = Field("localhost", alias="QDRANT_HOST")
     qdrant_port: int = Field(6333, alias="QDRANT_PORT")
+
+    # OpenRouter Config
+    app_url: str = Field("https://github.com/your-repo/las", alias="APP_URL")
+    app_name: str = Field("Local Agent System", alias="APP_NAME")
 
     class Config:
         env_file = ".env"
